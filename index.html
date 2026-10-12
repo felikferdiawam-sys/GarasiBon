@@ -132,7 +132,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .ri{background:var(--wh);border-radius:var(--rs);padding:16px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh);margin-bottom:10px}
 .ric{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 .ri-h .ric{background:var(--no-l)}.ri-b .ric{background:var(--ok-l)}
-/* PAGINATION RIWAYAT */
 .pager{display:flex;justify-content:center;align-items:center;gap:12px;margin:18px 0 8px;flex-wrap:wrap}
 .pager button{padding:10px 18px;border:2px solid var(--bdr);border-radius:var(--rs);background:var(--wh);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--dk);transition:var(--t)}
 .pager button:hover:not(:disabled){border-color:var(--pri);color:var(--pri);background:var(--pri-l)}
@@ -261,7 +260,7 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 <div class="mo" id="mEdt" onclick="cm('mEdt')"><div class="md md-lg" onclick="event.stopPropagation()"><div class="mh mh-y"><h2>✏️ Edit Hutang</h2><button class="mx" onclick="cm('mEdt')">✕</button></div><div class="mb" id="mEdtB"></div></div></div>
 <div class="mo" id="mPlg" onclick="cm('mPlg')"><div class="md" onclick="event.stopPropagation()"><div class="mh"><h2 id="mPlgT">Pelanggan</h2><button class="mx" onclick="cm('mPlg')">✕</button></div><div class="mb"><input type="hidden" id="mpId"><div class="fi" style="margin-bottom:12px"><label>👤 Nama *</label><input type="text" id="mpN"></div><div class="fi" style="margin-bottom:12px"><label>📱 No. WA/HP</label><input type="tel" id="mpH"></div><div class="fi" style="margin-bottom:16px"><label>📍 Alamat</label><input type="text" id="mpA"></div><div class="fac"><button class="btn btn-s" onclick="cm('mPlg')">Batal</button><button class="btn btn-p" onclick="svPlg()">💾 Simpan</button></div></div></div></div>
 
-<canvas id="cvs" width="800" height="1200"></canvas>
+<canvas id="cvs" width="1600" height="2400"></canvas>
 <div id="tBox" class="tc"></div>
 <footer class="ft"><div class="ft-c"><p>© 2024 Garasi Fotocopy</p><div class="net-status"><div class="net-dot" id="netDot"></div><span id="netText">Online</span></div></div></footer>
 
@@ -402,58 +401,98 @@ function doBayarAll(nama,mx){
   toast('Pembayaran tersimpan! ✅','ok');cm('mPay');go('dash');
 }
 
+// ===== RENDER NOTA HD & DIRECT SHARE WA =====
 function kirimNota(namaKey){
   const list=g_debts.filter(d=>d.nama.toLowerCase()===namaKey&&(d.jumlah-(d.pembayaran||[]).reduce((s,p)=>s+p.jumlah,0))>0);
   if(!list.length)return toast('Tidak ada hutang!','er');
   const pel=list[0];const wa=fW(pel.noHp);
   if(!wa)return toast('No HP tidak tersedia!','er');
   list.sort((a,b)=>new Date(a.tanggal)-new Date(b.tanggal));
+  
   let totalRows=0;list.forEach(h=>totalRows+=(h.items||[]).length||1);
-  const canvasH=300+totalRows*28+100;
+  const baseH=300+totalRows*28+100;
+  
+  // HiDPI Canvas Scale (2x HD Resolution Rendering)
   const C=document.getElementById('cvs');const c=C.getContext('2d');
-  C.width=800;C.height=Math.max(500,canvasH);
-  c.fillStyle='#fff';c.fillRect(0,0,C.width,C.height);
-  const gr=c.createLinearGradient(0,0,C.width,0);gr.addColorStop(0,'#1e3a5f');gr.addColorStop(.6,'#2563eb');gr.addColorStop(1,'#3b82f6');
-  c.fillStyle=gr;c.fillRect(0,0,C.width,95);
+  const scale=2;
+  const logicalW=800;
+  const logicalH=Math.max(500,baseH);
+  
+  C.width=logicalW*scale;
+  C.height=logicalH*scale;
+  c.scale(scale,scale);
+  
+  // Background
+  c.fillStyle='#fff';c.fillRect(0,0,logicalW,logicalH);
+  
+  // Header Bar
+  const gr=c.createLinearGradient(0,0,logicalW,0);gr.addColorStop(0,'#1e3a5f');gr.addColorStop(.6,'#2563eb');gr.addColorStop(1,'#3b82f6');
+  c.fillStyle=gr;c.fillRect(0,0,logicalW,95);
   c.fillStyle='#fff';c.font='bold 28px Poppins,Arial,sans-serif';c.textAlign='center';
-  c.fillText(TOKO.nama,C.width/2,36);
-  c.font='11px Poppins,Arial,sans-serif';c.fillText(TOKO.alamat,C.width/2,56);c.fillText('Telp: '+TOKO.telp,C.width/2,74);
-  c.font='bold 14px Poppins,Arial,sans-serif';c.fillText('━━━━ NOTA BULAN '+BLNU[new Date().getMonth()]+' ━━━━',C.width/2,92);
-  c.fillStyle='#64748b';c.font='11px Poppins,Arial,sans-serif';c.textAlign='right';c.fillText('Tanggal: '+fDL(new Date().toISOString()),C.width-30,115);
+  c.fillText(TOKO.nama,logicalW/2,36);
+  c.font='11px Poppins,Arial,sans-serif';c.fillText(TOKO.alamat,logicalW/2,56);c.fillText('Telp: '+TOKO.telp,logicalW/2,74);
+  c.font='bold 14px Poppins,Arial,sans-serif';c.fillText('━━━━ NOTA BULAN '+BLNU[new Date().getMonth()]+' ━━━━',logicalW/2,92);
+  c.fillStyle='#64748b';c.font='11px Poppins,Arial,sans-serif';c.textAlign='right';c.fillText('Tanggal: '+fDL(new Date().toISOString()),logicalW-30,115);
+  
   let y=135;c.textAlign='left';c.fillStyle='#1e293b';
   c.font='bold 14px Poppins,Arial,sans-serif';c.fillText('Kepada Yth:',30,y);y+=20;
   c.font='bold 17px Poppins,Arial,sans-serif';c.fillText(pel.nama,30,y);y+=20;
   c.fillStyle='#64748b';c.font='12px Poppins,Arial,sans-serif';
   if(pel.noHp){c.fillText('HP/WA: '+pel.noHp,30,y);y+=16}
   if(pel.alamat){c.fillText('Alamat: '+pel.alamat,30,y);y+=16}
-  y+=6;c.strokeStyle='#cbd5e1';c.lineWidth=1;c.beginPath();c.moveTo(30,y);c.lineTo(C.width-30,y);c.stroke();y+=10;
-  c.fillStyle='#1e40af';c.fillRect(30,y,C.width-60,26);
+  y+=6;c.strokeStyle='#cbd5e1';c.lineWidth=1;c.beginPath();c.moveTo(30,y);c.lineTo(logicalW-30,y);c.stroke();y+=10;
+  c.fillStyle='#1e40af';c.fillRect(30,y,logicalW-60,26);
   c.fillStyle='#fff';c.font='bold 11px Poppins,Arial,sans-serif';c.textAlign='left';
   c.fillText('TGL',42,y+17);c.fillText('ITEM',120,y+17);c.fillText('HARGA',380,y+17);c.fillText('JML',480,y+17);c.fillText('UNIT',530,y+17);
-  c.textAlign='right';c.fillText('JUMLAH',C.width-42,y+17);y+=30;
+  c.textAlign='right';c.fillText('JUMLAH',logicalW-42,y+17);y+=30;
+  
   let grandTotal=0;
   list.forEach(h=>{
     const sisa=h.jumlah-(h.pembayaran||[]).reduce((s,p)=>s+p.jumlah,0);grandTotal+=sisa;
     const items=h.items||[];const tglStr=fDS(h.tanggal);
-    if(items.length){items.forEach(it=>{c.fillStyle='#1e293b';c.font='12px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText(tglStr,42,y+14);c.fillText(it.nama.substring(0,26),120,y+14);c.fillText(fR(it.harga),380,y+14);c.fillText(String(it.jumlah),480,y+14);c.fillText(it.unit,530,y+14);c.textAlign='right';c.font='bold 12px Poppins,Arial,sans-serif';c.fillText(fR(it.total),C.width-42,y+14);c.strokeStyle='#e2e8f0';c.lineWidth=1;c.beginPath();c.moveTo(30,y+20);c.lineTo(C.width-30,y+20);c.stroke();y+=26})}
-    else{c.fillStyle='#1e293b';c.font='12px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText(tglStr,42,y+14);c.fillText((h.keterangan||'-').substring(0,26),120,y+14);c.textAlign='right';c.font='bold 12px Poppins,Arial,sans-serif';c.fillText(fR(sisa),C.width-42,y+14);c.strokeStyle='#e2e8f0';c.beginPath();c.moveTo(30,y+20);c.lineTo(C.width-30,y+20);c.stroke();y+=26}
+    if(items.length){items.forEach(it=>{c.fillStyle='#1e293b';c.font='12px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText(tglStr,42,y+14);c.fillText(it.nama.substring(0,26),120,y+14);c.fillText(fR(it.harga),380,y+14);c.fillText(String(it.jumlah),480,y+14);c.fillText(it.unit,530,y+14);c.textAlign='right';c.font='bold 12px Poppins,Arial,sans-serif';c.fillText(fR(it.total),logicalW-42,y+14);c.strokeStyle='#e2e8f0';c.lineWidth=1;c.beginPath();c.moveTo(30,y+20);c.lineTo(logicalW-30,y+20);c.stroke();y+=26})}
+    else{c.fillStyle='#1e293b';c.font='12px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText(tglStr,42,y+14);c.fillText((h.keterangan||'-').substring(0,26),120,y+14);c.textAlign='right';c.font='bold 12px Poppins,Arial,sans-serif';c.fillText(fR(sisa),logicalW-42,y+14);c.strokeStyle='#e2e8f0';c.beginPath();c.moveTo(30,y+20);c.lineTo(logicalW-30,y+20);c.stroke();y+=26}
     y+=4;
   });
-  y+=6;c.fillStyle='#dc2626';c.fillRect(30,y,C.width-60,40);
+  y+=6;c.fillStyle='#dc2626';c.fillRect(30,y,logicalW-60,40);
   c.fillStyle='#fff';c.font='bold 16px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText('TOTAL',45,y+26);
-  c.font='bold 22px Poppins,Arial,sans-serif';c.textAlign='right';c.fillText(fR(grandTotal),C.width-45,y+28);y+=55;
-  c.fillStyle='#1e293b';c.font='bold 12px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText('Pembayaran dapat ditransfer ke:',30,y);y+=18;
+  c.font='bold 22px Poppins,Arial,sans-serif';c.textAlign='right';c.fillText(fR(grandTotal),logicalW-45,y+28);y+=55;
+  c.fillStyle='#1e293b';c.font='bold 12px Poppins,Arial,sans-serif';c.textAlign='left';
+  c.fillText('Pembayaran dapat ditransfer ke:',30,y);y+=18;
   c.fillStyle='#2563eb';c.font='bold 14px Poppins,Arial,sans-serif';c.fillText('🏦 '+TOKO.rek,30,y);y+=18;
   c.fillStyle='#64748b';c.font='12px Poppins,Arial,sans-serif';c.fillText('a/n FELIK FERDIAWAN',30,y);
-  C.toBlob(blob=>{
-    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
-    a.download='Nota-'+pel.nama.replace(/\s+/g,'_')+'-'+BLNU[new Date().getMonth()]+'-'+new Date().getFullYear()+'.jpg';a.click();
-    const salam=greet();
-    const txt=encodeURIComponent(salam+' Kak '+pel.nama+',\n\nBerikut rincian Nota Belanja dari *'+TOKO.nama+'*.\n\nTotal: *'+fR(grandTotal)+'*\n\nPembayaran via transfer:\n🏦 *'+TOKO.rek+'*\na/n *FELIK FERDIAWAN*\n\nTerima kasih 🙏');
-    setTimeout(()=>window.open('https://wa.me/'+wa+'?text='+txt,'_blank'),600);
+
+  // Tanpa kata "Kak"
+  const salam=greet();
+  const rawText=salam+' '+pel.nama+',\n\nBerikut rincian Nota Belanja dari *'+TOKO.nama+'*.\n\nTotal: *'+fR(grandTotal)+'*\n\nPembayaran via transfer:\n🏦 *'+TOKO.rek+'*\na/n *FELIK FERDIAWAN*\n\nTerima kasih 🙏';
+
+  C.toBlob(async blob=>{
+    const fileName='Nota-'+pel.nama.replace(/\s+/g,'_')+'-'+BLNU[new Date().getMonth()]+'-'+new Date().getFullYear()+'.jpg';
+    const file=new File([blob], fileName, {type:'image/jpeg'});
+
+    // TAMPILKAN MEDIA SHARE JIKA SUPPORTED (HP ANDROID/IOS DIRECT SHARE AMBIL GAMBAR & TEKS)
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({
+          files:[file],
+          title:'Nota Belanja - '+TOKO.nama,
+          text:rawText
+        });
+        toast('Nota berhasil dibagikan! 📸','ok');
+        return;
+      }catch(e){
+        if(e.name!=='AbortError') console.warn('Share error:',e);
+      }
+    }
+
+    // FALLBACK KOMPUTER / DESKTOP (Auto Download + Buka WA URL)
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=fileName;a.click();
+    const encodedTxt=encodeURIComponent(rawText);
+    setTimeout(()=>window.open('https://wa.me/'+wa+'?text='+encodedTxt,'_blank'),600);
     URL.revokeObjectURL(url);
-  },'image/jpeg',0.92);
-  toast('Nota diunduh & WA dibuka! 📸','ok');
+    toast('Nota diunduh & WA dibuka! 📸','ok');
+  },'image/jpeg',0.98);
 }
 
 function updDD(){
@@ -526,7 +565,6 @@ function delH(id){
   toast('Dihapus!','wn');go('dash');
 }
 
-/* ===== RIWAYAT DENGAN PAGINATION 5 PER HALAMAN ===== */
 function renderRL(){
   const box=document.getElementById('rBox');
   const pager=document.getElementById('rPager');
@@ -605,10 +643,26 @@ function svPlg(){
   else{db.collection('customers').add({nama:nm,noHp:hp,alamat:al,createdAt:firebase.firestore.FieldValue.serverTimestamp()}).catch(console.warn)}
   toast('Tersimpan! ✅','ok');cm('mPlg');go('plg');
 }
-function delPM(id){
-  if(!confirm('Hapus pelanggan ini?'))return;
-  db.collection('customers').doc(id).delete().catch(console.warn);
-  toast('Dihapus!','wn');go('plg');
+
+async function delPM(id){
+  const p=g_customers.find(x=>x.id===id);if(!p)return;
+  if(!confirm('Hapus pelanggan "'+p.nama+'"?\n\n⚠️ PERINGATAN: Semua data transaksi hutang atas nama pelanggan ini JUGA AKAN DIHAPUS PERMANEN!'))return;
+  
+  try {
+    const batch=db.batch();
+    batch.delete(db.collection('customers').doc(id));
+    const targetName=p.nama.toLowerCase();
+    g_debts.forEach(d=>{
+      if((d.nama||'').toLowerCase()===targetName){
+        batch.delete(db.collection('debts').doc(d.id));
+      }
+    });
+    await batch.commit();
+    toast('Pelanggan & seluruh transaksi hutangnya telah dihapus! 🗑️','wn');
+    go('plg');
+  } catch(err) {
+    toast('Gagal menghapus: '+err.message,'er');
+  }
 }
 
 function cm(id){document.getElementById(id).classList.remove('on')}
