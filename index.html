@@ -7,16 +7,17 @@
 <title>Garasi Fotocopy - Pencatat Hutang</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" href="logo.png">
 
 <!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--pri:#2563eb;--pri-d:#1d4ed8;--pri-l:#dbeafe;--sec:#64748b;--ok:#10b981;--ok-l:#d1fae5;--no:#ef4444;--no-l:#fee2e2;--warn:#f59e0b;--warn-l:#fef3c7;--info:#06b6d4;--dk:#1e293b;--lt:#f8fafc;--wh:#fff;--bdr:#e2e8f0;--wa:#25D366;--wa-l:#dcfce7;--sh:0 4px 6px -1px rgba(0,0,0,.08);--sh2:0 10px 15px -3px rgba(0,0,0,.1);--r:12px;--rs:8px;--rl:16px;--t:all .25s ease}
-body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-height:100vh}
+body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-height:100vh; -webkit-tap-highlight-color: transparent;}
 
 /* HEADER */
 .hd{background:linear-gradient(135deg,#1e3a5f,#2563eb 60%,#3b82f6);color:#fff;padding:20px 24px}
@@ -185,7 +186,7 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .rkp-tbl tr:hover td{background:var(--pri-l)}
 
 /* ====================================================
-   RESPONSIVE MOBILE (Bottom Nav & Item Cards)
+   RESPONSIVE MOBILE (Bottom Nav & Form Items)
    ==================================================== */
 @media(max-width:768px){
     .fg{grid-template-columns:1fr}
@@ -209,23 +210,27 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
     /* ITEM FORM RESPONSIVE (Cards instead of Table) */
     .itb thead { display: none; }
     .itb tbody tr { 
-        display: flex; flex-wrap: wrap; background: #fff; padding: 14px; 
+        display: flex; flex-wrap: wrap; background: #fff; padding: 16px; 
         border-radius: 8px; border: 1px solid var(--pri-l); margin-bottom: 14px; 
         position: relative; gap: 8px; box-shadow: var(--sh);
     }
     .itb td { display: block; border: none; padding: 0; }
     .itb .td-no { display: none; }
-    .itb .td-del { position: absolute; top: 12px; right: 12px; }
-    .itb .td-nama { width: 100%; padding-right: 40px; } 
+    .itb .td-del { position: absolute; top: 14px; right: 14px; }
+    .itb .td-nama { width: 100%; padding-right: 40px; margin-bottom: 4px; } 
     .itb .td-harga { width: calc(50% - 4px); }
-    .itb .td-jml { width: calc(25% - 4px); }
-    .itb .td-unit { width: calc(25% - 4px); }
+    
+    /* Perbesaran Kolom JML dan UNIT untuk Mobile */
+    .itb .td-jml { width: calc(20% - 4px); }
+    .itb .td-unit { width: calc(30% - 4px); }
+    
     .itb .ct { 
-        width: 100%; text-align: right; padding-top: 10px; 
+        width: 100%; text-align: right; padding-top: 12px; 
         border-top: 1px dashed var(--bdr); margin-top: 6px; 
         font-size: 1.2rem; 
     }
-    .itb input, .itb select { padding: 14px 10px; font-size: 16px; border-color: var(--bdr); }
+    /* Padding input & select lebih besar agar mudah disentuh */
+    .itb input, .itb select { padding: 14px 8px; font-size: 15px; border-color: var(--bdr); }
 }
 @media(max-width:480px){.sc{grid-template-columns:1fr}}
 </style>
@@ -234,7 +239,8 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 
 <header class="hd"><div class="hd-c">
 <div class="lg">
-    <img src="logo.jpg" class="toko-logo" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23fff\'/><text x=\'50\' y=\'55\' font-size=\'40\' text-anchor=\'middle\' dominant-baseline=\'middle\'>🖨️</text></svg>'">
+    <!-- LOGO TOKO (Baca logo.png) -->
+    <img src="logo.png" class="toko-logo" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23fff\'/><text x=\'50\' y=\'55\' font-size=\'40\' text-anchor=\'middle\' dominant-baseline=\'middle\'>🖨️</text></svg>'">
     <div><h1>GARASI FOTOCOPY</h1><p>Sistem Pencatat Hutang Pelanggan</p></div>
 </div>
 <div class="hs">
@@ -251,8 +257,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 </nav>
 
 <main class="mc">
-
-<!-- DASHBOARD -->
 <section id="s-dash" class="sec on">
 <div class="sc">
 <div class="scd c1"><div class="ci">💵</div><div class="ck"><h3>Total Hutang</h3><p class="cv" id="vT">Rp 0</p></div></div>
@@ -265,7 +269,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 <div id="accBox" class="acc"></div>
 </section>
 
-<!-- CATAT HUTANG -->
 <section id="s-catat" class="sec">
 <div class="fc">
 <div class="fh"><h2>➕ Catat Hutang Baru</h2><p>Pilih pelanggan & masukkan item</p></div>
@@ -287,23 +290,19 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 </div>
 </section>
 
-<!-- RIWAYAT -->
 <section id="s-riw" class="sec">
 <div class="shdr"><h2>📜 Riwayat Transaksi</h2></div>
 <div id="rBox"></div>
 <div id="rekapBox"></div>
 </section>
 
-<!-- PELANGGAN -->
 <section id="s-plg" class="sec">
 <div class="shdr"><h2>👥 Master Data Pelanggan</h2><button class="btn btn-p btn-sm" onclick="addPM()">➕ Tambah Pelanggan</button></div>
 <div class="srch"><div class="sbox"><span class="si">🔍</span><input type="text" id="qP" placeholder="Cari pelanggan..." oninput="renderPL()"></div></div>
 <div id="pGrid" class="pg-g"></div>
 </section>
-
 </main>
 
-<!-- MODALS -->
 <div class="mo" id="mDet" onclick="cm('mDet')"><div class="md md-lg" onclick="event.stopPropagation()"><div class="mh"><h2 id="mDetT">Detail</h2><button class="mx" onclick="cm('mDet')">✕</button></div><div class="mb" id="mDetB"></div></div></div>
 <div class="mo" id="mPay" onclick="cm('mPay')"><div class="md" onclick="event.stopPropagation()"><div class="mh mh-g"><h2 id="mPayT">💰 Pembayaran</h2><button class="mx" onclick="cm('mPay')">✕</button></div><div class="mb" id="mPayB"></div></div></div>
 <div class="mo" id="mEdt" onclick="cm('mEdt')"><div class="md md-lg" onclick="event.stopPropagation()"><div class="mh mh-y"><h2>✏️ Edit Hutang</h2><button class="mx" onclick="cm('mEdt')">✕</button></div><div class="mb" id="mEdtB"></div></div></div>
@@ -323,16 +322,30 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 </footer>
 
 <script>
-// =========================================================================
+// ==========================================
+// REGISTRASI SERVICE WORKER UNTUK OFFLINE (PWA)
+// ==========================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('SW ter-install untuk Mode Offline.');
+    }).catch(err => {
+      console.log('SW gagal install: ', err);
+    });
+  });
+}
+
+// ==========================================
 // ⚙️ KONFIGURASI GOOGLE FIREBASE CLOUD
-// =========================================================================
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyBdy0cKxnUizOet0Sl-aJ_orw5vsA9YLXI",
   authDomain: "garasi-fotocopy.firebaseapp.com",
   projectId: "garasi-fotocopy",
   storageBucket: "garasi-fotocopy.firebasestorage.app",
   messagingSenderId: "525388661169",
-  appId: "1:525388661169:web:a61fb2b601fd877a6c3d90"
+  appId: "1:525388661169:web:a61fb2b601fd877a6c3d90",
+  measurementId: "G-2G1VPWZGWP"
 };
 
 let db;
@@ -345,7 +358,7 @@ try {
         console.warn("Offline persistence warn:", err.message);
     });
 } catch(e) {
-    console.warn("Firebase config fallback.", e);
+    console.warn("Firebase offline/fallback mode.", e);
 }
 
 // ==== NETWORK STATUS ====
@@ -383,12 +396,14 @@ function initCloudSync() {
         snap.forEach(doc => g_debts.push({ id: doc.id, ...doc.data() }));
         renderDash(); updDD();
     });
+
     db.collection('customers').onSnapshot(snap => {
         g_customers = [];
         snap.forEach(doc => g_customers.push({ id: doc.id, ...doc.data() }));
         document.getElementById('hP').textContent = g_customers.length;
         updDD(); renderPL();
     });
+
     db.collection('logs').orderBy('timestamp', 'desc').limit(300).onSnapshot(snap => {
         g_logs = [];
         snap.forEach(doc => g_logs.push({ id: doc.id, ...doc.data() }));
@@ -402,8 +417,8 @@ function fDS(t){if(!t)return'-';var d=new Date(t);return String(d.getDate()).pad
 function fDL(t){return t?new Date(t).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'-'}
 function fCr(e){e.value=e.value.replace(/[^\d]/g,'')}
 function pC(v){return parseInt((v||'').toString().replace(/[^\d]/g,''))||0}
-function ex(s){return(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function fW(n){if(!n)return'';let c=n.replace(/[^\d]/g,'');if(c.startsWith('0'))c='62'+c.slice(1);return c}
+function ex(s){return(s||'').replace(/[&<>"']/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+function fW(n){if(!n)return'';var c=n.replace(/[^\d]/g,'');if(c.startsWith('0'))c='62'+c.slice(1);return c}
 var BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 var BLNU=['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
 function greet(){var h=new Date().getHours();if(h>=5&&h<11)return'Selamat Pagi';if(h>=11&&h<15)return'Selamat Siang';if(h>=15&&h<18)return'Selamat Sore';return'Selamat Malam'}
