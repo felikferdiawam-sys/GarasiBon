@@ -1,22 +1,5 @@
-const CACHE_NAME = 'garasi-v5';
-const ASSETS = [
-    './',
-    './index.html',
-    './manifest.json',
-    './logo.png',
-    'https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js',
-    'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js',
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap'
-];
-self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())); });
-self.addEventListener('fetch', event => {
-    if (event.request.method !== 'GET') return;
-    event.respondWith(caches.match(event.request).then(cachedResponse => {
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-            if (networkResponse.status === 200) { caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkResponse.clone())); }
-            return networkResponse;
-        }).catch(() => cachedResponse);
-        return cachedResponse || fetchPromise;
-    }));
-});
+const CACHE_NAME='garasi-v6';
+const ASSETS=['./','./index.html','./manifest.json','./logo.png','https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js','https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js','https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(c=>{const f=fetch(e.request).then(n=>{if(n.status===200)caches.open(CACHE_NAME).then(cache=>cache.put(e.request,n.clone()));return n}).catch(()=>c);return c||f}))});
