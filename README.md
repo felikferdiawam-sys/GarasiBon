@@ -4,12 +4,12 @@ Aplikasi web pencatat hutang pelanggan berbasis Google Cloud Firebase Firestore 
 
 ## Fitur Utama:
 - ☁️ Offline Support & Sinkronisasi Cloud Otomatis.
-- 📱 Mobile Responsive (Menu Bar Bawah & Input Form Diperbesar).
-- 💾 Progressive Web App (PWA) - Bisa di-install di Android / Chrome Desktop.
+- 📱 Mobile Responsive (Menu Bar Bawah & Form Layanan Lebar).
+- 💾 Progressive Web App (PWA) - Bisa di-install di Android / Chrome Desktop (Ada Logo).
 - 📊 Dashboard Accordion per Pelanggan.
 - 💰 Bayar Semua Otomatis.
 - 📸 Download Gambar Nota Kuitansi JPG.
 - 💬 Integrasi WhatsApp Tagihan.
 - 📜 Rekap Transaksi Bulanan.
 
-⚠️ **PENTING**: Pindahkan gambar `logo.png` ke dalam folder project ini agar logo toko Anda muncul dan bisa di-install di HP.
+⚠️ **PENTING**: Jangan lupa pindahkan file gambar `logo.png` ke dalam folder project ini agar logo toko Anda muncul dan bisa di-install di HP.

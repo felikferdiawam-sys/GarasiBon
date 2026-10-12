@@ -12,14 +12,12 @@
 <!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--pri:#2563eb;--pri-d:#1d4ed8;--pri-l:#dbeafe;--sec:#64748b;--ok:#10b981;--ok-l:#d1fae5;--no:#ef4444;--no-l:#fee2e2;--warn:#f59e0b;--warn-l:#fef3c7;--info:#06b6d4;--dk:#1e293b;--lt:#f8fafc;--wh:#fff;--bdr:#e2e8f0;--wa:#25D366;--wa-l:#dcfce7;--sh:0 4px 6px -1px rgba(0,0,0,.08);--sh2:0 10px 15px -3px rgba(0,0,0,.1);--r:12px;--rs:8px;--rl:16px;--t:all .25s ease}
 body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-height:100vh; -webkit-tap-highlight-color: transparent;}
 
-/* HEADER */
 .hd{background:linear-gradient(135deg,#1e3a5f,#2563eb 60%,#3b82f6);color:#fff;padding:20px 24px}
 .hd-c{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
 .lg{display:flex;align-items:center;gap:14px}
@@ -31,19 +29,16 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .sn{display:block;font-size:1rem;font-weight:700}
 .sl{display:block;font-size:.65rem;opacity:.85;text-transform:uppercase}
 
-/* NAV */
 .nv{background:var(--wh);display:flex;max-width:1200px;margin:0 auto;border-bottom:2px solid var(--bdr);overflow-x:auto;position:sticky;top:0;z-index:100}
 .tb{flex:1;min-width:100px;padding:16px 8px;border:none;background:0 0;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:500;color:var(--sec);display:flex;align-items:center;justify-content:center;gap:6px;transition:var(--t);position:relative;white-space:nowrap}
 .tb:hover{color:var(--pri);background:var(--pri-l)}
 .tb.on{color:var(--pri);font-weight:700}
 .tb.on::after{content:'';position:absolute;bottom:0;left:15%;width:70%;height:3px;background:var(--pri);border-radius:3px 3px 0 0}
 
-/* MAIN */
 .mc{max-width:1200px;margin:0 auto;padding:22px;min-height:calc(100vh - 180px)}
 .sec{display:none;animation:fi .3s ease}.sec.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* CARDS & ACCORDION */
 .sc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px}
 .scd{background:var(--wh);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh);border-left:4px solid}
 .c1{border-color:var(--pri)}.c2{border-color:var(--ok)}.c3{border-color:var(--warn)}.c4{border-color:var(--info)}
@@ -51,6 +46,7 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .c1 .ci{background:var(--pri-l)}.c2 .ci{background:var(--ok-l)}.c3 .ci{background:var(--warn-l)}.c4 .ci{background:#e0f2fe}
 .ck h3{font-size:.72rem;color:var(--sec);text-transform:uppercase}
 .cv{font-size:1.15rem;font-weight:700;margin-top:2px}
+
 .srch{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
 .sbox{flex:1;min-width:250px;position:relative}
 .sbox input{width:100%;padding:14px 14px 14px 40px;border:2px solid var(--bdr);border-radius:50px;font-family:inherit;font-size:.9rem;background:var(--wh);outline:none;transition:var(--t)}
@@ -58,6 +54,7 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .sbox .si{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem}
 .shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
 .shdr h2{font-size:1.1rem;font-weight:700}
+
 .acc{display:flex;flex-direction:column;gap:12px}
 .pc{background:var(--wh);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;border:2px solid transparent;transition:var(--t)}
 .pc.op{border-color:var(--pri)}
@@ -78,7 +75,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .pc.op .pb{display:block}
 .pa{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--bdr)}
 
-/* HUTANG ITEMS */
 .hi{background:var(--lt);border-radius:var(--rs);padding:14px;margin-bottom:10px;border-left:3px solid var(--warn)}
 .hih{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:6px}
 .hid{font-size:.78rem;color:var(--sec);font-weight:500}
@@ -88,7 +84,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .hdt .it{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--bdr)}
 .hac{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 
-/* BUTTONS */
 .ba{padding:8px 14px;border:none;border-radius:var(--rs);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:var(--t);display:inline-flex;align-items:center;gap:4px;text-decoration:none}
 .b-by{background:var(--ok-l);color:#047857}.b-by:hover{background:var(--ok);color:#fff}
 .b-ba{background:linear-gradient(135deg,var(--ok),#059669);color:#fff;font-weight:700}.b-ba:hover{opacity:.9}
@@ -104,7 +99,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .btn-ok{background:linear-gradient(135deg,var(--ok),#059669);color:#fff}
 .btn-sm{padding:8px 14px;font-size:.8rem}
 
-/* FORM */
 .fc{background:var(--wh);border-radius:var(--rl);padding:26px;box-shadow:var(--sh2);max-width:820px;margin:0 auto}
 .fh{text-align:center;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--bdr)}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -116,7 +110,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .fac{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:14px;border-top:2px solid var(--bdr)}
 .qs{background:#eff6ff;padding:14px;border-radius:var(--rs);border:1px dashed var(--pri);margin-bottom:16px}
 
-/* ITEM TABLE (Responsive Ready) */
 .its{background:var(--lt);border:2px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:14px}
 .its h3{font-size:.95rem;font-weight:700;margin-bottom:10px}
 .itb{width:100%;border-collapse:collapse;font-size:.85rem}
@@ -132,12 +125,10 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .gt{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:14px 16px;background:linear-gradient(135deg,var(--pri),var(--pri-d));border-radius:var(--rs);color:#fff}
 .gt .gl{font-size:.9rem;font-weight:600}.gt .gv{font-size:1.3rem;font-weight:800}
 
-/* PROGRESS */
 .pgb{width:100%;height:6px;background:var(--bdr);border-radius:4px;overflow:hidden;margin-top:6px}
 .pgf{height:100%;border-radius:4px}
 .pg-ok{background:var(--ok)}.pg-wn{background:var(--warn)}
 
-/* MODAL */
 .mo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:center;padding:16px;backdrop-filter:blur(4px)}
 .mo.on{display:flex}
 .md{background:var(--wh);border-radius:var(--rl);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh2)}
@@ -152,7 +143,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .dr:last-child{border-bottom:none}
 .drl{font-size:.85rem;color:var(--sec)}.drv{font-size:.9rem;font-weight:600;text-align:right}
 
-/* PLG GRID & RIWAYAT */
 .pg-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .pgc{background:var(--wh);border-radius:var(--r);padding:18px;box-shadow:var(--sh);border-top:4px solid var(--pri)}
 .pgc-n{font-size:1.05rem;font-weight:700;margin-bottom:8px}
@@ -170,7 +160,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .es{text-align:center;padding:40px 20px;color:var(--sec)}
 .es .ei{font-size:3rem;margin-bottom:10px;opacity:.6}
 
-/* FOOTER & STATUS OFFLINE */
 .ft{background:var(--dk);color:rgba(255,255,255,.7);padding:20px;margin-top:40px}
 .ft-c{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;font-size:.8rem}
 .net-status{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);padding:6px 14px;border-radius:20px;font-weight:600;letter-spacing:.5px}
@@ -185,16 +174,13 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 .rkp-tbl td{padding:10px 12px;border-bottom:1px solid var(--bdr)}
 .rkp-tbl tr:hover td{background:var(--pri-l)}
 
-/* ====================================================
-   RESPONSIVE MOBILE (Bottom Nav & Form Items)
-   ==================================================== */
+/* RESPONSIVE MOBILE */
 @media(max-width:768px){
     .fg{grid-template-columns:1fr}
     .hd-c{flex-direction:column;text-align:center;gap:12px}
     .hs{justify-content:center}
     .sc{grid-template-columns:1fr 1fr}
     
-    /* Bottom Nav Bar */
     .nv{position:fixed;bottom:0;top:auto;left:0;width:100%;border-top:1px solid var(--bdr);border-bottom:none;box-shadow:0 -4px 15px rgba(0,0,0,.08);padding:0 5px;background:var(--wh);padding-bottom:env(safe-area-inset-bottom)}
     .tb{flex-direction:column;padding:10px 4px;gap:4px;min-width:auto}
     .tb span:not(.ti){display:block;font-size:.65rem;font-weight:600}
@@ -207,7 +193,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
     .ph{padding:14px}
     .toko-logo{width:64px;height:64px}
 
-    /* ITEM FORM RESPONSIVE (Cards instead of Table) */
     .itb thead { display: none; }
     .itb tbody tr { 
         display: flex; flex-wrap: wrap; background: #fff; padding: 16px; 
@@ -219,17 +204,13 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
     .itb .td-del { position: absolute; top: 14px; right: 14px; }
     .itb .td-nama { width: 100%; padding-right: 40px; margin-bottom: 4px; } 
     .itb .td-harga { width: calc(50% - 4px); }
-    
-    /* Perbesaran Kolom JML dan UNIT untuk Mobile */
     .itb .td-jml { width: calc(20% - 4px); }
     .itb .td-unit { width: calc(30% - 4px); }
-    
     .itb .ct { 
         width: 100%; text-align: right; padding-top: 12px; 
         border-top: 1px dashed var(--bdr); margin-top: 6px; 
         font-size: 1.2rem; 
     }
-    /* Padding input & select lebih besar agar mudah disentuh */
     .itb input, .itb select { padding: 14px 8px; font-size: 15px; border-color: var(--bdr); }
 }
 @media(max-width:480px){.sc{grid-template-columns:1fr}}
@@ -239,7 +220,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 
 <header class="hd"><div class="hd-c">
 <div class="lg">
-    <!-- LOGO TOKO (Baca logo.png) -->
     <img src="logo.png" class="toko-logo" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23fff\'/><text x=\'50\' y=\'55\' font-size=\'40\' text-anchor=\'middle\' dominant-baseline=\'middle\'>🖨️</text></svg>'">
     <div><h1>GARASI FOTOCOPY</h1><p>Sistem Pencatat Hutang Pelanggan</p></div>
 </div>
@@ -322,9 +302,6 @@ body{font-family:'Poppins',sans-serif;background:var(--lt);color:var(--dk);min-h
 </footer>
 
 <script>
-// ==========================================
-// REGISTRASI SERVICE WORKER UNTUK OFFLINE (PWA)
-// ==========================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').then(reg => {
@@ -335,9 +312,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// ==========================================
-// ⚙️ KONFIGURASI GOOGLE FIREBASE CLOUD
-// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyBdy0cKxnUizOet0Sl-aJ_orw5vsA9YLXI",
   authDomain: "garasi-fotocopy.firebaseapp.com",
@@ -353,7 +327,7 @@ try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
     
-    // OFFLINE SUPPORT (Otomatis Sync pas Online)
+    // AKTIFKAN OFFLINE PERSISTENCE
     db.enablePersistence({synchronizeTabs:true}).catch(err => {
         console.warn("Offline persistence warn:", err.message);
     });
@@ -361,7 +335,6 @@ try {
     console.warn("Firebase offline/fallback mode.", e);
 }
 
-// ==== NETWORK STATUS ====
 function updateNetStatus() {
     const isOnline = navigator.onLine;
     const dot = document.getElementById('netDot');
@@ -380,7 +353,6 @@ window.addEventListener('online', updateNetStatus);
 window.addEventListener('offline', updateNetStatus);
 updateNetStatus();
 
-// =========================================================================
 let g_debts = [], g_customers = [], g_logs = [];
 const TOKO = {
     nama: 'GARASI FOTOCOPY',
@@ -396,14 +368,12 @@ function initCloudSync() {
         snap.forEach(doc => g_debts.push({ id: doc.id, ...doc.data() }));
         renderDash(); updDD();
     });
-
     db.collection('customers').onSnapshot(snap => {
         g_customers = [];
         snap.forEach(doc => g_customers.push({ id: doc.id, ...doc.data() }));
         document.getElementById('hP').textContent = g_customers.length;
         updDD(); renderPL();
     });
-
     db.collection('logs').orderBy('timestamp', 'desc').limit(300).onSnapshot(snap => {
         g_logs = [];
         snap.forEach(doc => g_logs.push({ id: doc.id, ...doc.data() }));
@@ -530,7 +500,12 @@ function doBayarAll(nama,mx){
     });
     var logRef = db.collection('logs').doc();
     batch.set(logRef, { type: 'bayar', nama: nama, jumlah: jml, tanggal: new Date().toISOString().split('T')[0], keterangan: 'Pembayaran semua nota', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-    batch.commit().then(() => { toast('Pembayaran tersimpan! ✅','ok'); cm('mPay'); }).catch(err => { toast('Gagal: '+err.message, 'er'); });
+    
+    // OFFLINE FIX: Catch error and still update UI
+    batch.commit().catch(err => console.warn("Sync deferred/failed: ", err));
+    toast('Pembayaran tersimpan! ✅','ok'); 
+    cm('mPay');
+    go('dash');
 }
 
 function kirimNota(namaKey){
@@ -628,9 +603,7 @@ function saveH(e){
     if(total<=0)return toast('Total harus > 0!','er');
     
     var ket=items.map(it=>it.nama+' ('+it.jumlah+' '+it.unit+' × '+fR(it.harga)+' = '+fR(it.total)+')').join('; ');
-    var btn = document.getElementById('btnSubmitHutang');
-    btn.disabled = true;
-
+    
     var batch = db.batch();
     var debtRef = db.collection('debts').doc();
     batch.set(debtRef, {
@@ -656,9 +629,12 @@ function saveH(e){
     var logRef = db.collection('logs').doc();
     batch.set(logRef, { type: 'hutang', nama: nama, jumlah: total, tanggal: document.getElementById('fD').value, keterangan: ket, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
 
-    batch.commit().then(() => { toast('Hutang tersimpan! 📝','ok'); resetF(); go('dash'); })
-         .catch(err => { toast('Gagal: '+err.message, 'er'); })
-         .finally(() => { btn.disabled = false; });
+    // OFFLINE FIX: Jangan tunggu resolve promise untuk pindah UI
+    batch.commit().catch(err => console.warn("Sync deferred/failed: ", err));
+    
+    toast('Hutang tersimpan! 📝','ok'); 
+    resetF(); 
+    go('dash');
 }
 function resetF(){document.getElementById('frmH').reset();document.getElementById('fD').value=new Date().toISOString().split('T')[0];document.getElementById('ddP').value='';document.getElementById('tBody').innerHTML='';rowC=0;addR()}
 
@@ -682,11 +658,13 @@ function edtH(id){
 }
 function svEdt(id){
     db.collection('debts').doc(id).update({ nama: document.getElementById('eN').value.trim(), noHp: document.getElementById('eH').value.trim(), keterangan: document.getElementById('eK').value.trim() })
-      .then(()=>{toast('Diperbarui! ✏️','ok'); cm('mEdt')}).catch(err=>{toast('Gagal: '+err.message, 'er')});
+      .catch(err => console.warn(err));
+    toast('Diperbarui! ✏️','ok'); cm('mEdt'); go('dash');
 }
 function delH(id){
     if(!confirm('Hapus catatan hutang ini dari Cloud?')) return;
-    db.collection('debts').doc(id).delete().then(()=>{toast('Dihapus!','wn')}).catch(err=>{toast('Gagal: '+err.message,'er')});
+    db.collection('debts').doc(id).delete().catch(err => console.warn(err));
+    toast('Dihapus!','wn'); go('dash');
 }
 
 function renderRL(){
@@ -743,12 +721,14 @@ function edtPM(id){
 function svPlg(){
     var id=document.getElementById('mpId').value; var nm=document.getElementById('mpN').value.trim(); var hp=document.getElementById('mpH').value.trim(); var al=document.getElementById('mpA').value.trim();
     if(!nm)return toast('Nama wajib!','er');
-    if(id) { db.collection('customers').doc(id).update({ nama: nm, noHp: hp, alamat: al }).then(()=>{toast('Tersimpan! ✅','ok'); cm('mPlg')}).catch(err=>{toast('Gagal: '+err.message,'er')}); } 
-    else { db.collection('customers').add({ nama: nm, noHp: hp, alamat: al, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).then(()=>{toast('Tersimpan! ✅','ok'); cm('mPlg')}).catch(err=>{toast('Gagal: '+err.message,'er')}); }
+    if(id) { db.collection('customers').doc(id).update({ nama: nm, noHp: hp, alamat: al }).catch(console.warn); } 
+    else { db.collection('customers').add({ nama: nm, noHp: hp, alamat: al, createdAt: firebase.firestore.FieldValue.serverTimestamp() }).catch(console.warn); }
+    toast('Tersimpan! ✅','ok'); cm('mPlg'); go('plg');
 }
 function delPM(id){
     if(!confirm('Hapus pelanggan ini dari Cloud?')) return;
-    db.collection('customers').doc(id).delete().then(()=>{toast('Dihapus!','wn')}).catch(err=>{toast('Gagal: '+err.message,'er')});
+    db.collection('customers').doc(id).delete().catch(console.warn);
+    toast('Dihapus!','wn'); go('plg');
 }
 
 function cm(id){document.getElementById(id).classList.remove('on')}
