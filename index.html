@@ -401,7 +401,7 @@ function doBayarAll(nama,mx){
   toast('Pembayaran tersimpan! ✅','ok');cm('mPay');go('dash');
 }
 
-// ===== RENDER NOTA HD & DIRECT SHARE WA =====
+// ===== RENDER NOTA HD + WATERMARK CREATED BY GARASI FOTOCOPY =====
 function kirimNota(namaKey){
   const list=g_debts.filter(d=>d.nama.toLowerCase()===namaKey&&(d.jumlah-(d.pembayaran||[]).reduce((s,p)=>s+p.jumlah,0))>0);
   if(!list.length)return toast('Tidak ada hutang!','er');
@@ -410,13 +410,12 @@ function kirimNota(namaKey){
   list.sort((a,b)=>new Date(a.tanggal)-new Date(b.tanggal));
   
   let totalRows=0;list.forEach(h=>totalRows+=(h.items||[]).length||1);
-  const baseH=300+totalRows*28+100;
+  const baseH=300+totalRows*28+110; // Tambah ruang untuk watermark
   
-  // HiDPI Canvas Scale (2x HD Resolution Rendering)
   const C=document.getElementById('cvs');const c=C.getContext('2d');
   const scale=2;
   const logicalW=800;
-  const logicalH=Math.max(500,baseH);
+  const logicalH=Math.max(520,baseH);
   
   C.width=logicalW*scale;
   C.height=logicalH*scale;
@@ -457,12 +456,18 @@ function kirimNota(namaKey){
   y+=6;c.fillStyle='#dc2626';c.fillRect(30,y,logicalW-60,40);
   c.fillStyle='#fff';c.font='bold 16px Poppins,Arial,sans-serif';c.textAlign='left';c.fillText('TOTAL',45,y+26);
   c.font='bold 22px Poppins,Arial,sans-serif';c.textAlign='right';c.fillText(fR(grandTotal),logicalW-45,y+28);y+=55;
+  
   c.fillStyle='#1e293b';c.font='bold 12px Poppins,Arial,sans-serif';c.textAlign='left';
   c.fillText('Pembayaran dapat ditransfer ke:',30,y);y+=18;
   c.fillStyle='#2563eb';c.font='bold 14px Poppins,Arial,sans-serif';c.fillText('🏦 '+TOKO.rek,30,y);y+=18;
   c.fillStyle='#64748b';c.font='12px Poppins,Arial,sans-serif';c.fillText('a/n FELIK FERDIAWAN',30,y);
 
-  // Tanpa kata "Kak"
+  // --- WATERMARK FOOTER KANAN BAWAH ---
+  c.textAlign='right';
+  c.font='italic 11px Poppins,Arial,sans-serif';
+  c.fillStyle='#94a3b8';
+  c.fillText('created by Garasi Fotocopy', logicalW - 30, y);
+
   const salam=greet();
   const rawText=salam+' '+pel.nama+',\n\nBerikut rincian Nota Belanja dari *'+TOKO.nama+'*.\n\nTotal: *'+fR(grandTotal)+'*\n\nPembayaran via transfer:\n🏦 *'+TOKO.rek+'*\na/n *FELIK FERDIAWAN*\n\nTerima kasih 🙏';
 
@@ -470,7 +475,6 @@ function kirimNota(namaKey){
     const fileName='Nota-'+pel.nama.replace(/\s+/g,'_')+'-'+BLNU[new Date().getMonth()]+'-'+new Date().getFullYear()+'.jpg';
     const file=new File([blob], fileName, {type:'image/jpeg'});
 
-    // TAMPILKAN MEDIA SHARE JIKA SUPPORTED (HP ANDROID/IOS DIRECT SHARE AMBIL GAMBAR & TEKS)
     if(navigator.canShare && navigator.canShare({files:[file]})){
       try{
         await navigator.share({
@@ -485,7 +489,6 @@ function kirimNota(namaKey){
       }
     }
 
-    // FALLBACK KOMPUTER / DESKTOP (Auto Download + Buka WA URL)
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');a.href=url;a.download=fileName;a.click();
     const encodedTxt=encodeURIComponent(rawText);
